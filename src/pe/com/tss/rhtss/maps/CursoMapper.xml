@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pe.com.tss.rhtss.dao.CursoDao">
+
+	<resultMap id="ResultMapCurso2" type="Curso">
+
+		<id column="n_codcur" property="nCodCur" />
+		<result column="v_nomcur" property="vNomCur" />
+
+
+
+	</resultMap>
+
+	<select id="listarCurso" statementType="CALLABLE" resultMap="ResultMapCurso2">
+		{call PKG_CURSO.SP_LSTCUR(		
+		#{outParameters.lstCur,jdbcType=CURSOR,mode=OUT,javaType=java.sql.ResultSet,resultMap=ResultMapCurso2},
+		#{outParameters.codErr, jdbcType=VARCHAR,mode=OUT},
+		#{outParameters.menErr, jdbcType=VARCHAR,mode=OUT}
+		)}
+	</select>
+
+
+
+
+
+
+</mapper>

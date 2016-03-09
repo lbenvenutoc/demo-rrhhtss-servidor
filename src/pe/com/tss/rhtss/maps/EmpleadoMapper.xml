@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pe.com.tss.rhtss.dao.EmpleadoDao">
+
+	<resultMap id="ResultMapEmpleado" type="Empleado">
+
+		<id column="IDEMPLOYEE" property="idEmployee" />
+		<result column="FIRSTNAME" property="firstName" />
+		<result column="SECONDNAME" property="secondName" />
+		<result column="FIRSTLASTNAME" property="firstLastName" />
+		<result column="SECONDLASTNAME" property="secondLastName" />
+		<result column="DOCUMENTTYPE" property="documentType" />
+		<result column="IDCOUNTRY" property="idCountry" />
+		<result column="IDMEDIC" property="idMedic" />
+
+	</resultMap>
+	
+	<resultMap id="ResultMapCurso" type="Curso">
+		<id column="n_codcur" property="nCodCur" />
+		<result column="v_nomcur" property="vNomCur" />
+		<result column="idemployee" property="idEmployee" />
+	</resultMap>
+
+	<select id="listarEmpleado" statementType="CALLABLE" resultMap="ResultMapEmpleado">
+		{call PKG_EMPLEADO.SP_LSTEMP(
+		#{outParameters.lstEmp,jdbcType=CURSOR,mode=OUT,javaType=java.sql.ResultSet,resultMap=ResultMapEmpleado},
+		#{outParameters.codErr, jdbcType=VARCHAR,mode=OUT},
+		#{outParameters.menErr, jdbcType=VARCHAR,mode=OUT}
+		)}
+	</select>
+
+	<select id="buscarEmpleado_1" statementType="CALLABLE"
+		resultMap="ResultMapEmpleado">
+		{call PKG_EMPLEADO.SP_BUSEMP(
+		#{empleado.firstLastName},
+		#{outParameters.lstEmp,jdbcType=CURSOR,mode=OUT,javaType=java.sql.ResultSet,resultMap=ResultMapEmpleado},
+		#{outParameters.codErr, jdbcType=VARCHAR,mode=OUT},
+		#{outParameters.menErr, jdbcType=VARCHAR,mode=OUT}
+		)}
+	</select>
+
+	<select id="buscarEmpleado" resultMap="ResultMapEmpleado"
+		parameterType="Empleado">
+		SELECT
+		IDEMPLOYEE as idEmployee,
+		FIRSTNAME as firstName,
+		SECONDNAME as secondName,
+		FIRSTLASTNAME as firstLastName,
+		SECONDLASTNAME as secondLastName,
+		DOCUMENTTYPE as documentType,
+		NUMBERIDENTITYDOCUMENT as
+		numberIdentityDocument,
+		IDCOUNTRY as idCountry,
+		IDMEDIC as idMedic
+		FROM
+		employee
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="empleado.firstLastName != ''">
+				AND FIRSTLASTNAME LIKE #{empleado.firstLastName} ||'%'
+			</if>
+
+			<if test="empleado.secondLastName != ''">
+				AND SECONDLASTNAME LIKE #{empleado.secondLastName} ||'%'
+			</if>
+		</trim>
+	</select>
+
+	<select id="obtenerEmpleado" statementType="CALLABLE" resultMap="ResultMapEmpleado">
+		{call PKG_EMPLEADO.SP_OBTEMP(
+		#{idEmployee},
+		#{outParameters.lstEmp,jdbcType=CURSOR,mode=OUT,javaType=java.sql.ResultSet,resultMap=ResultMapEmpleado},
+		#{outParameters.codErr, jdbcType=VARCHAR,mode=OUT},
+		#{outParameters.menErr, jdbcType=VARCHAR,mode=OUT}
+		)}
+	</select>
+
+	<select id="insertarEmpleado" statementType="CALLABLE">
+		{call
+		PKG_EMPLEADO.SP_INSEMP(
+		#{empleado.firstName},
+		#{empleado.secondName},
+		#{empleado.firstLastName},
+		#{empleado.secondLastName},
+		#{empleado.documentType},
+		#{empleado.numberIdentityDocument},
+		#{empleado.idCountry},
+		#{empleado.idMedic},
+		#{outParameters.idEmployee,
+		jdbcType=INTEGER,mode=OUT},
+		#{outParameters.codErr,
+		jdbcType=VARCHAR,mode=OUT},
+		#{outParameters.menErr,
+		jdbcType=VARCHAR,mode=OUT}
+		)}
+	</select>
+
+	<select id="actualizarEmpleado" statementType="CALLABLE">
+		{call
+		PKG_EMPLEADO.SP_UPDEMP(
+		#{empleado.idEmployee},
+		#{empleado.firstName},
+		#{empleado.secondName},
+		#{empleado.firstLastName},
+		#{empleado.secondLastName},
+		#{empleado.documentType},
+		#{empleado.numberIdentityDocument},
+		#{empleado.idCountry},
+		#{empleado.idMedic},
+		#{outParameters.codErr,
+		jdbcType=VARCHAR,mode=OUT},
+		#{outParameters.menErr,
+		jdbcType=VARCHAR,mode=OUT}
+		)}
+	</select>
+	
+	<select id="obtenerCursoPorEmpleado" statementType="CALLABLE" resultMap="ResultMapCurso">
+		{call PKG_EMPLEADO.SP_BUSCUR(
+		#{idEmployee},
+		#{outParameters.lstCur,jdbcType=CURSOR,mode=OUT,javaType=java.sql.ResultSet,resultMap=ResultMapCurso},
+		#{outParameters.codErr, jdbcType=VARCHAR,mode=OUT},
+		#{outParameters.menErr, jdbcType=VARCHAR,mode=OUT}
+		)}
+	</select>
+	<select id="actualizarCursoPorEmpleado" statementType="CALLABLE">
+		{call PKG_EMPLEADO.SP_ACTCUR(	
+		#{curso.idEmployee},
+		#{curso.nCodCur},	
+		#{curso.vNomCur},
+		#{outParameters.codErr, jdbcType=VARCHAR,mode=OUT},
+		#{outParameters.menErr, jdbcType=VARCHAR,mode=OUT}
+		)}
+	</select>
+	<select id="insertarCursoPorEmpleado" statementType="CALLABLE">
+		{call PKG_EMPLEADO.SP_INSCUR(	
+		#{curso.idEmployee},
+		#{curso.vNomCur},
+		#{outParameters.nCodCur,
+		jdbcType=INTEGER,mode=OUT},
+		#{outParameters.codErr, jdbcType=VARCHAR,mode=OUT},
+		#{outParameters.menErr, jdbcType=VARCHAR,mode=OUT}
+		)}
+	</select>
+
+
+
+
+
+</mapper>

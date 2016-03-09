@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<settings>
+		<setting name="jdbcTypeForNull" value="NULL" />
+	</settings>
+
+	<typeAliases>
+
+		<typeAlias alias="Curso" type="pe.com.tss.rhtss.model.Curso" />
+		<typeAlias alias="Empleado" type="pe.com.tss.rhtss.model.Empleado" />
+
+
+	</typeAliases>
+
+
+	<mappers>
+
+
+		<mapper resource="pe/com/tss/rhtss/maps/CursoMapper.xml" />
+		<mapper resource="pe/com/tss/rhtss/maps/EmpleadoMapper.xml" />
+
+	</mappers>
+</configuration>
+
